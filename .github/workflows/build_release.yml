@@ -28,11 +28,13 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: ottaku-bot-release.tar
+      - name: Show dir stucture
+        run: ls -R
       - name: Upload release artifact to production environment
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.PROD_HOST }}
           username: ${{ secrets.PROD_USERNAME }}
           key: ${{ secrets.PROD_SSH_KEY }}
-          source: "ottaku-bot-release.tar"
+          source: ottaku-bot-release.tar
           target: "OttakuBot"
