@@ -36,5 +36,5 @@ jobs:
           host: ${{ secrets.PROD_HOST }}
           username: ${{ secrets.PROD_USERNAME }}
           key: ${{ secrets.PROD_SSH_KEY }}
-          source: ottaku-bot-release.tar
+          source: com.example.stocks-aggregator-0.0.1.tar
           target: "OttakuBot"
