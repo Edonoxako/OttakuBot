@@ -19,3 +19,20 @@ jobs:
           name: ottaku-bot-release.tar
           path: build/distributions/com.example.stocks-aggregator-0.0.1.tar
           retention-days: 2
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download release artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ottaku-bot-release.tar
+      - name: Upload release artifact to production environment
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.PROD_HOST }}
+          username: ${{ secrets.PROD_USERNAME }}
+          key: ${{ secrets.PROD_SSH_KEY }}
+          source: "ottaku-bot-release.tar"
+          target: "OttakuBot"
