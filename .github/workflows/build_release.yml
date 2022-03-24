@@ -50,6 +50,7 @@ jobs:
           key: ${{ secrets.PROD_SSH_KEY }}
           passphrase: ${{ secrets.PROD_SSH_PASSPHRASE }}
           script: |
+            cd OttakuBot
             tar -xvf com.example.stocks-aggregator-0.0.1.tar 
             tmux kill-server
             tmux new -d -s ottaku-bot "OttakuBot/com.example.stocks-aggregator-0.0.1/bin/com.example.stocks-aggregator"
