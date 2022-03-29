@@ -18,6 +18,10 @@ import com.github.kotlintelegrambot.entities.InlineKeyboardMarkup
 import com.github.kotlintelegrambot.entities.keyboard.InlineKeyboardButton
 import kotlinx.coroutines.runBlocking
 
+fun Dispatcher.helloCommand() = command("hello") {
+    respond("Охаё!")
+}
+
 fun Dispatcher.topAnimeCommand() = command("top") {
     val topAnimeList = runBlocking { getTopAnimeList() }
     respond(formatTopAnimeList(topAnimeList))
