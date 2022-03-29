@@ -20,7 +20,7 @@ jobs:
           path: build/distributions/com.example.stocks-aggregator-0.0.1.tar
           retention-days: 2
 
-  deploy:
+  upload:
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -34,5 +34,22 @@ jobs:
           host: ${{ secrets.PROD_HOST }}
           username: ${{ secrets.PROD_USERNAME }}
           key: ${{ secrets.PROD_SSH_KEY }}
-          source: "ottaku-bot-release.tar"
+          passphrase: ${{ secrets.PROD_SSH_PASSPHRASE }}
+          source: com.example.stocks-aggregator-0.0.1.tar
           target: "OttakuBot"
+
+  relaunch:
+    needs: upload
+    runs-on: ubuntu-latest
+    steps:
+      - name: Relaunch with new version
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PROD_HOST }}
+          username: ${{ secrets.PROD_USERNAME }}
+          key: ${{ secrets.PROD_SSH_KEY }}
+          passphrase: ${{ secrets.PROD_SSH_PASSPHRASE }}
+          script: |
+            cd OttakuBot
+            tar -xvf com.example.stocks-aggregator-0.0.1.tar 
+            sudo systemctl restart ottakubot.service
