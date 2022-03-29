@@ -52,5 +52,4 @@ jobs:
           script: |
             cd OttakuBot
             tar -xvf com.example.stocks-aggregator-0.0.1.tar 
-            tmux kill-server
-            tmux new -d -s ottaku-bot "com.example.stocks-aggregator-0.0.1/bin/com.example.stocks-aggregator"
+            sudo systemctl restart ottakubot.service
