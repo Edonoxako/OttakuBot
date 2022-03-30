@@ -6,6 +6,7 @@ import com.github.kotlintelegrambot.dispatch
 fun Bot.Builder.configureDispatch() {
     dispatch {
         helloCommand()
+        byeCommand()
         topAnimeCommand()
         findCharacterCommand()
 

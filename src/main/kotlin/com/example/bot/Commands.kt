@@ -22,6 +22,10 @@ fun Dispatcher.helloCommand() = command("hello") {
     respond("Охаё!")
 }
 
+fun Dispatcher.byeCommand() = command("bye") {
+    respond("Сайонара!")
+}
+
 fun Dispatcher.topAnimeCommand() = command("top") {
     val topAnimeList = runBlocking { getTopAnimeList() }
     respond(formatTopAnimeList(topAnimeList))
