@@ -1,9 +1,8 @@
 package com.example
 
-import com.example.formatter.formatAboutText
+import com.example.domain.formatAboutText
 import org.junit.Assert
 import org.junit.Test
-import kotlin.test.Asserter
 
 class ApplicationTest {
 
