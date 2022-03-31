@@ -1,21 +1,14 @@
 package com.example.bot
 
-import com.example.domain.getCharacterById
-import com.example.domain.getTopAnimeList
-import com.example.domain.searchCharacterByName
-import com.example.domain.searchCharacterVoicesByName
-import com.example.formatter.formatCharacterInlineResult
-import com.example.formatter.formatCharacterInlineSuggest
-import com.example.formatter.formatVoiceActorCharactersList
+import com.example.domain.*
 import com.example.formatter.formatTopAnimeList
+import com.example.formatter.formatVoiceActorCharactersList
 import com.example.util.createArticleInlineResult
 import com.example.util.respond
 import com.github.kotlintelegrambot.dispatcher.Dispatcher
 import com.github.kotlintelegrambot.dispatcher.callbackQuery
 import com.github.kotlintelegrambot.dispatcher.command
 import com.github.kotlintelegrambot.dispatcher.inlineQuery
-import com.github.kotlintelegrambot.entities.InlineKeyboardMarkup
-import com.github.kotlintelegrambot.entities.keyboard.InlineKeyboardButton
 import kotlinx.coroutines.runBlocking
 
 fun Dispatcher.helloCommand() = command("hello") {
@@ -50,27 +43,15 @@ fun Dispatcher.findCharacterInlineQuery() = inlineQuery {
 
     if (query.isNotBlank()) {
 
-        val characters = runBlocking { searchCharacterByName(query) }
-            .map { character ->
-                val suggestItem = formatCharacterInlineSuggest(character)
-                val resultTextShort = formatCharacterInlineResult(character, fullAboutText = false)
-                val addKeyboardMarkup = character.about != null && character.about.length > 500
-                createArticleInlineResult(
-                    querySuggestItem = suggestItem,
-                    queryResultText = resultTextShort,
-                    replyMarkup = if (addKeyboardMarkup) {
-                        InlineKeyboardMarkup.create(
-                            listOf(
-                                InlineKeyboardButton.CallbackData(
-                                    text = "Learn more about ${character.name}",
-                                    callbackData = character.malId.toString()
-                                )
-                            ),
-                        )
-                    } else {
-                        null
-                    }
-                )
+        val characters = runBlocking { searchEverywhere(query) }
+            .map { searchResultEntry ->
+                with(searchResultEntry) {
+                    createArticleInlineResult(
+                        querySuggestItem = suggestItem,
+                        queryResultText = resultMessage.resultText,
+                        replyMarkup = resultMessage.keyboardMarkup
+                    )
+                }
             }
 
         respond(characters)

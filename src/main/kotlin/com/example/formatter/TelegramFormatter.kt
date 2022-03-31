@@ -1,10 +1,7 @@
 package com.example.formatter
 
-import com.example.models.mal.domain.InlineArticleSuggestItem
 import com.example.models.mal.domain.OtherVoceActorCharacters
 import com.example.models.mal.dto.AnimeDto
-import com.example.models.mal.dto.CharacterDto
-import com.example.util.url
 
 fun formatTopAnimeList(topAnimeList: List<AnimeDto>) = topAnimeList.joinToString(
     separator = "\n",
@@ -31,44 +28,5 @@ fun formatVoiceActorCharactersList(otherVoceActorCharacters: OtherVoceActorChara
                 append(roles)
             }
         }
-    }
-}
-
-fun formatCharacterInlineSuggest(characterDto: CharacterDto): InlineArticleSuggestItem {
-    return with(characterDto) {
-        InlineArticleSuggestItem(
-            id = malId.toString(),
-            title = name,
-            thumbUrl = images?.url,
-            description = about
-        )
-    }
-}
-
-fun formatCharacterInlineResult(characterDto: CharacterDto, fullAboutText: Boolean = false): String {
-    return buildString {
-        appendLine(characterDto.name)
-        appendLine()
-
-        val about = characterDto.about
-        if (about != null) {
-            val aboutText = if (fullAboutText) {
-                about
-            } else {
-                formatAboutText(about)
-            }
-            appendLine(aboutText)
-            appendLine()
-        }
-
-        appendLine(characterDto.malUrl)
-    }
-}
-
-fun formatAboutText(about: String): String {
-    return if (about.length > 500) {
-        about.split("\n\n").first()
-    } else {
-        about
     }
 }

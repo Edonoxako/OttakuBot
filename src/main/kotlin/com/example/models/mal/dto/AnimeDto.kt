@@ -15,6 +15,15 @@ data class AnimeDto(
     @SerialName("title")
     val title: String,
 
+    @SerialName("images")
+    val images: ImagesDto,
+
+    @SerialName("synopsis")
+    val synopsis: String? = null,
+
+    @SerialName("score")
+    val score: Double? = null,
+
     @SerialName("episodes")
     val episodes: Int? = null
 )

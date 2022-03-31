@@ -25,6 +25,20 @@ class RootApiBuilder(client: HttpClient) : JikanApiBuilder(client) {
         searchQuery = searchQuery
     )
 
+    fun searchAnime(
+        limit: Int = 10,
+        orderBy: AnimeOrderBy = AnimeOrderBy.SCORE,
+        sort: Sort = Sort.ASC,
+        searchQuery: String? = null
+    ) = AnimeApiBuilder(
+        client = client,
+        previousApiNode = this,
+        limit = limit,
+        orderBy = orderBy,
+        sort = sort,
+        searchQuery = searchQuery
+    )
+
     fun character(id: String) = SpecificCharacterApiBuilder(
         client = client,
         previousApiNode = this,

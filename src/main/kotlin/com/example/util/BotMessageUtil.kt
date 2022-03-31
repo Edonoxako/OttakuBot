@@ -27,7 +27,8 @@ fun InlineQueryHandlerEnvironment.respond(inlineQueryResults: List<InlineQueryRe
 fun createTextMessageContent(text: String): InputMessageContent.Text {
     return InputMessageContent.Text(
         messageText = text,
-        disableWebPagePreview = false
+        disableWebPagePreview = false,
+        parseMode = ParseMode.HTML
     )
 }
 

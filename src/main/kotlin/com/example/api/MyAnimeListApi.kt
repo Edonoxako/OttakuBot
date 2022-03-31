@@ -24,6 +24,7 @@ object MyAnimeListApi {
             json(
                 Json {
                     ignoreUnknownKeys = true
+                    coerceInputValues = true
                 }
             )
         }
@@ -46,8 +47,17 @@ object MyAnimeListApi {
     suspend fun searchCharacterByName(characterName: String) = withRetryCollection {
         api.searchCharacter(
             searchQuery = characterName,
-            sort = Sort.DESC
+            sort = Sort.DESC,
+            limit = 5
         ).getCollection<CharacterDto>()
+    }
+
+    suspend fun searchAnimeByName(animeTitle: String) = withRetryCollection {
+        api.searchAnime(
+            searchQuery = animeTitle,
+            sort = Sort.DESC,
+            limit = 5
+        ).getCollection<AnimeDto>()
     }
 
     suspend fun getCharacterById(characterId: String) = withRetrySingle {
