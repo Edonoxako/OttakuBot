@@ -1,6 +1,7 @@
 package com.example.domain
 
 import com.example.api.MyAnimeListApi
+import com.example.core.template.*
 import com.example.models.mal.domain.InlineArticleSuggestItem
 import com.example.models.mal.domain.ResultMessage
 import com.example.models.mal.domain.SearchResultEntry
@@ -18,7 +19,7 @@ private fun createSearchResultEntry(characterDto: CharacterDto): SearchResultEnt
     return SearchResultEntry(
         suggestItem = formatCharacterInlineSuggest(characterDto),
         resultMessage = ResultMessage(
-            resultText = formatCharacterInlineResult(characterDto),
+            resultText = createCharacterArticle(characterDto),
             keyboardMarkup = createKeyboardMarkup(characterDto)
         )
     )
@@ -35,24 +36,27 @@ fun formatCharacterInlineSuggest(characterDto: CharacterDto): InlineArticleSugge
     }
 }
 
-fun formatCharacterInlineResult(characterDto: CharacterDto, fullAboutText: Boolean = false): String {
-    return buildString {
-        appendLine("<b>Character: </b>${characterDto.name}")
-        appendLine()
-
-        val about = characterDto.about
-        if (about != null) {
-            val aboutText = if (fullAboutText) {
-                about
-            } else {
-                formatAboutText(about)
-            }
-            appendLine(aboutText)
-            appendLine()
+fun createCharacterArticle(characterDto: CharacterDto, fullAboutText: Boolean = false) = article {
+    paragraph {
+        line {
+            bold { text("Character: ") }
+            text(characterDto.name)
         }
-
-        appendLine(characterDto.malUrl)
     }
+
+    val about = characterDto.about
+    if (about != null) {
+        val aboutText = if (fullAboutText) {
+            about
+        } else {
+            formatAboutText(about)
+        }
+        paragraph {
+            line { text(aboutText) }
+        }
+    }
+
+    bold { link(characterDto.malUrl, "Read on My Anime List") }
 }
 
 fun formatAboutText(about: String): String {

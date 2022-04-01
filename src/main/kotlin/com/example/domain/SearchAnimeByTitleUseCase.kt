@@ -1,6 +1,7 @@
 package com.example.domain
 
 import com.example.api.MyAnimeListApi
+import com.example.core.template.*
 import com.example.models.mal.domain.InlineArticleSuggestItem
 import com.example.models.mal.domain.ResultMessage
 import com.example.models.mal.domain.SearchResultEntry
@@ -16,7 +17,7 @@ private fun createSearchResultEntry(animeDto: AnimeDto): SearchResultEntry {
     return SearchResultEntry(
         suggestItem = createSuggestItem(animeDto),
         resultMessage = ResultMessage(
-            resultText = createResultText(animeDto)
+            resultText = createAnimeArticle(animeDto)
         )
     )
 }
@@ -25,25 +26,53 @@ private fun createSuggestItem(animeDto: AnimeDto) = InlineArticleSuggestItem(
     id = animeDto.malId.toString(),
     title = animeDto.title,
     thumbUrl = animeDto.images.url,
-    description = "Anime\n★ ${animeDto.score ?: ""}"
+    description = article {
+        line { text("Anime") }
+        animeSubtitle(animeDto)
+    }
 )
 
-private fun createResultText(animeDto: AnimeDto) = buildString {
-    appendLine("<b>Anime: </b>${animeDto.title}")
-    if (animeDto.score != null) appendLine("★ ${animeDto.score}")
-    appendLine()
-    if (animeDto.synopsis != null) {
-        appendLine(formatSynopsisText(animeDto.synopsis))
-        appendLine()
+fun createAnimeArticle(animeDto: AnimeDto) = article {
+    paragraph {
+        line {
+            bold {
+                if (animeDto.englishTitle != null) {
+                    text(animeDto.englishTitle)
+                    text(" / ")
+                }
+                text(animeDto.title)
+            }
+        }
     }
-    appendLine(animeDto.malUrl)
 
+    paragraph {
+        animeSubtitle(animeDto)
+    }
+
+    paragraph {
+        listItem(animeDto.status?.let { "Status: $it" })
+        listItem(animeDto.genres?.joinToString(prefix = "Genres: ") { it.name })
+        listItem(animeDto.studios?.joinToString(prefix = "Studios: ") { it.name })
+    }
+
+
+    bold {
+        link(animeDto.malUrl, "Read on My Anime List")
+        if (animeDto.trailer?.url != null) {
+            text(" • ")
+            link(animeDto.trailer.url, "Watch trailer")
+        }
+    }
 }
 
-private fun formatSynopsisText(synopsis: String): String {
-    return if (synopsis.length > 500) {
-        synopsis.split("\n\n").first()
-    } else {
-        synopsis
+private fun ArticleScaffold.animeSubtitle(animeDto: AnimeDto) {
+    line {
+        horizontalList(
+            delimiter = " • ",
+            ratingString(animeDto.score, animeDto.scoredBy),
+            animeDto.type,
+            animeDto.year?.toString(),
+            animeDto.episodes?.let { "$it episodes" }
+        )
     }
 }

@@ -62,7 +62,7 @@ fun Dispatcher.inlineMessageCallbackQuery() = callbackQuery {
     val inlineMessageId = callbackQuery.inlineMessageId ?: return@callbackQuery
     val characterId = callbackQuery.data
 
-    val characterMessage = formatCharacterInlineResult(
+    val characterMessage = createCharacterArticle(
         characterDto = runBlocking { getCharacterById(characterId) },
         fullAboutText = true
     )
