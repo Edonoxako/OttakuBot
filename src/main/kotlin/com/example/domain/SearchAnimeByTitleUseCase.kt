@@ -50,7 +50,10 @@ fun createAnimeArticle(animeDto: AnimeDto) = article {
     }
 
     paragraph {
-        listItem(animeDto.status?.let { "Status: $it" })
+        if (animeDto.status != STATUS_FINISHED_AIRING) {
+            listItem(animeDto.status?.let { "Status: $it" })
+        }
+        listItem(animeDto.aired?.formattedByServer?.let { "Airing dates: $it" })
         listItem(animeDto.genres?.joinToString(prefix = "Genres: ") { it.name })
         listItem(animeDto.studios?.joinToString(prefix = "Studios: ") { it.name })
     }
@@ -72,7 +75,10 @@ private fun ArticleScaffold.animeSubtitle(animeDto: AnimeDto) {
             ratingString(animeDto.score, animeDto.scoredBy),
             animeDto.type,
             animeDto.year?.toString(),
-            animeDto.episodes?.let { "$it episodes" }
+            animeDto.episodes?.let { "$it episodes" },
+            animeDto.rating
         )
     }
 }
+
+private const val STATUS_FINISHED_AIRING = "Finished Airing"

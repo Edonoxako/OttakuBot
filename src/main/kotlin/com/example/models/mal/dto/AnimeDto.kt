@@ -49,5 +49,14 @@ data class AnimeDto(
     val status: String? = null,
 
     @SerialName("trailer")
-    val trailer: AnimeTrailerDto? = null
+    val trailer: AnimeTrailerDto? = null,
+
+    @SerialName("aired")
+    val aired: AnimeAiringDatesDto? = null,
+
+    @SerialName("airing")
+    val airing: Boolean? = null,
+
+    @SerialName("rating")
+    val rating: String? = null
 )
